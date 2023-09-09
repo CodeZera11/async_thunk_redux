@@ -1,23 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTodos } from "./redux/slices/todos";
 
 function App() {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state);
+
+  if (data.todos.isLoading) {
+    return <h1>Loading....</h1>;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={() => dispatch(fetchTodos())}>Fetch Data</button>
+      {data.todos.data &&
+        data.todos.data.map((todo) => <li key={todo.title}>{todo.title}</li>)}
     </div>
   );
 }
